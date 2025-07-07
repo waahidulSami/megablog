@@ -19,8 +19,8 @@ const handleGoogleLogin = async () => {
   try {
     authService.account.createOAuth2Session(
       'google',
-      'http://localhost:5173',
-      'http://localhost:5173/fail'
+        "megablog-9ooy.vercel.app",
+        "megablog-9ooy.vercel.app/fail"
     );
   } catch (error) {
     console.error("Failed login:", error);
@@ -31,8 +31,8 @@ const handleGoogleLogin = async () => {
     try {
       authService.account.createOAuth2Session(
         "github",
-        "http://localhost:5173",
-        "http://localhost:5173/fail"
+        "megablog-9ooy.vercel.app",
+        "megablog-9ooy.vercel.app/fail"
       );
     } catch (error) {
       console.error(error);
