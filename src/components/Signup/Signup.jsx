@@ -20,6 +20,7 @@ function Signup() {
 
   const { register, handleSubmit } = useForm();
 
+
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     setError("");
@@ -36,6 +37,9 @@ function Signup() {
       setGoogleLoading(false);
     }
   };
+
+
+
 
   const handleGithubLogin = async () => {
     setGithubLoading(true);
