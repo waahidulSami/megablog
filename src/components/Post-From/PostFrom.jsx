@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"; 
+import React, { useCallback, useEffect, useState } from "react"; 
 import { useForm } from "react-hook-form";
 import { Button, Input, Selected, RTE } from "../index";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,11 @@ import { useSelector } from "react-redux";
 import service from "../../appwrite/config";
 
 export default function PostForm({ post }) {
+
+const  [isSubmitting , setIsSubmitting] = useState(false)
+const [previewUrl, setPreviewUrl] = useState(null);
+
+
   const {
     register,
     handleSubmit,
@@ -15,28 +20,38 @@ export default function PostForm({ post }) {
     getValues,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      title: post?.title || "",
-      content: post?.content || "",
-      slug: post?.$id || "",
-      status: post?.status || "active",
-      category: post?.category || "All",
-    },
+ defaultValues: {
+  title: post?.title || "",
+  content: post?.content || "",
+  slug: post?.slug || "",
+  status: post?.status || "active",
+  category: post?.category || "All",
+},
+
   });
 
   const categories = [
-    "All",
-    "Electronics",
-    "Fashion",
-    "Groceries",
-    "Health",
-    "Beauty",
+     "All",
+  "Technology",
+  "Health",
+  "Travel",
+  "Food",
+  "Lifestyle",
+  "Business",
+  "Entertainment",
+  "Finance",
+  "Education",
   ];
+
+
+
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth?.userData);
 
   const submit = async (data) => {
+    setIsSubmitting(true)
+  console.log("Form submit data:", data);
     try {
       if (post) {
         // Updating existing post
@@ -67,10 +82,14 @@ export default function PostForm({ post }) {
         if (file) {
                const fileId = file.$id;
           data.featuredImage = fileId
-          const newPost = await service.createPost({
-            ...data,
-            userId: userData.$id,
-          });
+          console.log(userData);
+     const newPost = await service.createPost({
+  ...data,
+  userId: userData.$id,
+   authorName: userData.name,
+});
+
+
           if (newPost) {
             navigate(`/post/${newPost.$id}`);
           }
@@ -79,6 +98,8 @@ export default function PostForm({ post }) {
     } catch (error) {
       console.error("Error submitting post:", error);
       // Optionally, show error to user here
+    } finally {
+      setIsSubmitting(false)
     }
   };
 
@@ -96,12 +117,21 @@ export default function PostForm({ post }) {
   React.useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", SlugTransform(value.title), { shouldValidate: true });
+       setValue("slug", SlugTransform(value.title), { shouldValidate: true });
       }
     });
 
     return () => subscription.unsubscribe();
   }, [watch, SlugTransform, setValue]);
+
+
+React.useEffect(() => {
+  if (post?.featuredImage) {
+    service.getFilepreview(post.featuredImage).then((url) => {
+      if (url) setPreviewUrl(url);
+    });
+  }
+}, [post]);
 
   return (
     <form
@@ -128,7 +158,7 @@ export default function PostForm({ post }) {
             label="Slug"
             placeholder="Enter Post Slug"
             className="mb-1"
-            {...register("slug", { required: "Slug is required" })}
+            {...register("slug", { required:  false })}
           />
           {errors.slug && (
             <p className="text-sm text-red-600">{errors.slug.message}</p>
@@ -141,6 +171,7 @@ export default function PostForm({ post }) {
             name="content"
             control={control}
             defaultValue={getValues("content")}
+            
           />
         </div>
       </div>
@@ -163,15 +194,20 @@ export default function PostForm({ post }) {
         </div>
 
         {/* Existing image preview */}
-        {post && post.featuredImage && (
-          <div className="w-full mb-4">
-            <img
-              src={service.getFilepreview(post.featuredImage)}
-              alt={post.title}
-              className="w-full h-auto rounded-xl border object-cover"
-            />
-          </div>
-        )}
+            {previewUrl && (
+              <div className="w-full mb-4">
+                <img
+                  src={previewUrl}
+                  alt={post?.title || "Post image"}
+                  className="w-full h-auto rounded-xl border object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://placehold.co/400x200?text=No+Image";
+                  }}
+                />
+              </div>
+            )}
+
 
         <div>
           <Selected
@@ -185,8 +221,18 @@ export default function PostForm({ post }) {
           )}
         </div>
 
-        <Button type="submit" className="w-50 h-10 rounded-lg   ">
-          {post ? "Update Post" : "Create Post"}
+       <Button 
+          type="submit" 
+          className="w-50 h-10 rounded-lg flex items-center justify-center gap-2" 
+          disabled={isSubmitting}
+        >
+          {isSubmitting && (
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent"></div>
+          )}
+          {isSubmitting 
+            ? (post ? "Updating..." : "Creating...") 
+            : (post ? "Update Post" : "Create Post")
+          }
         </Button>
       </div>
     </form>

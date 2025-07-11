@@ -9,6 +9,8 @@ import Selected from './Selcted';
 import RTE from './RTE';
 import PostCard from './PostCard';
 import PostFrom from './Post-From/PostFrom';
+import ResetPassword from './resetPassord/resetPassword';
+import Recover from './ForgetPassord/ForgetPassord';
 
 export {
     Header,
@@ -21,6 +23,8 @@ export {
     Selected,
     RTE,
     PostCard,
-    PostFrom
+    PostFrom,
+    ResetPassword,
+    Recover
    
 }

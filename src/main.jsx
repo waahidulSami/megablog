@@ -14,6 +14,8 @@ import EditePost from './pages/EditPost.jsx'
 import Post from './pages/Post.jsx'
 import AddPost from './pages/AddPost.jsx'
 import React from 'react'
+import Recover from './components/ForgetPassord/ForgetPassord.jsx';
+import ResetPassword from './components/resetPassord/resetPassword.jsx';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,24 @@ const router = createBrowserRouter([
         </AuthLayout>
           
          )
+      },
+      {
+        path:"/recover",
+        element:(
+          
+              <Recover />
+          
+        
+        )
+      },
+      {
+        path:"/reset-password",
+        element:(
+         
+             <ResetPassword />
+         
+         
+        )
       },
       {
           path: "/all-posts",

@@ -1,8 +1,5 @@
-
-
-
 import conf from "../conf/conf";
-import { Client, ID , Databases , Permission , Storage , Query  } from "appwrite";
+import { Client, ID , Databases ,  Storage , Query  } from "appwrite";
 
 
 export class Service {
@@ -20,7 +17,7 @@ export class Service {
     }
 
     async createPost(
-    {title , content, featuredImage ,status , userId}) {
+    {title , content, featuredImage ,status , userId , category , authorName}) {
         try{
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId, // Database ID
@@ -32,7 +29,9 @@ export class Service {
                     content,
                     featuredImage,
                     status,
-                    userId, 
+                    userId,
+                    category,
+                    authorName
                 }
             )
         }
@@ -42,7 +41,7 @@ export class Service {
         }
     }
 
-    async updatePost(postId, {title, content, featuredImage, status}) {
+    async updatePost(postId, {title, content, featuredImage, status , category   }) {
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId, // Database ID
@@ -53,6 +52,8 @@ export class Service {
                     content,
                     featuredImage,
                     status,
+                    category,
+                   
                 }
             );
         } catch (error) {
@@ -88,7 +89,7 @@ export class Service {
         }
     }
 
-    async getPosts(querys = [Query.equal("status" , "active")]){
+    async getPosts(querys = [Query.equal("status", "active" )]){
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId, // Database ID
@@ -132,20 +133,20 @@ export class Service {
         }
     }
 
-     getFilepreview(fileId) {
-        try {
-            return  this.bucket.getFilePreview(
-                conf.appwriteBucketId, // Bucket ID
-                fileId // File ID to get preview
-            );
-        } catch (error) {
-            console.error("Error getting file preview:", error);
-            throw error; 
-        }
-    }
+async getFilepreview(fileId) {
+  if (!fileId) return undefined;
 
+  try {
+    const filePreview = await this.bucket.getFileView(conf.appwriteBucketId, fileId);
+   
+    return filePreview;   // Return the string URL directly
+  } catch (error) {
+    console.error("Error in getFilepreview:", error);
+    return undefined;
+  }
 }
 
+}
 
 const service = new  Service();
 

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import LogoutBtn from './LogoutBtn';
 import dummimg from '../../assets/dummy.jpg'
+import service from '../../appwrite/config';
+import authService from '../../appwrite/auth';
 const Header = () => {
   const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [authorName, setAuthorName] = useState("");
 
   const navItems = [
     { name: 'Home', postId: '/', active: true },
@@ -16,6 +19,17 @@ const Header = () => {
     { name: 'Signup', postId: '/signup', active: !authStatus },
     { name: 'Add Post', postId: '/add-post', active: authStatus },
   ];
+
+  useEffect(() => {
+    authService.getCurrentUser().then((user) => {
+      if(user && user.$id){
+           setAuthorName(user.name);
+      } else {
+         setAuthorName("Unknown");
+      }
+    })
+  },[])
+
 
   const handleNav = (postId) => {
     navigate(postId);
@@ -57,15 +71,11 @@ const Header = () => {
         {/* Desktop Right */}
         <div className="hidden lg:flex items-center gap-3">
           {authStatus && <LogoutBtn />}
-          <div
-            className="bg-center bg-no-repeat bg-cover rounded-full size-10 cursor-pointer hover:ring-2 hover:ring-[#4F39F6] hover:ring-opacity-50 transition-all border-2 border-gray-200"
-            style={{
-              backgroundImage: `url(${dummimg})`,
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label="User profile"
-          />
+          <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                  <span className="text-indigo-600 font-semibold text-lg">
+                    {authorName.charAt(0).toUpperCase()}
+                  </span>
+                </div>
         </div>
 
         {/* Mobile Menu Toggle */}

@@ -1,7 +1,10 @@
 import React, { useId, forwardRef } from "react";
 
 const Selected = forwardRef(function Selected(
-  { options, label, className = "", ...props },
+  { options,
+     label,
+     className = "",
+      ...props },
   ref
 ) {
   const id = useId();

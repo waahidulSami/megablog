@@ -65,14 +65,24 @@ export class AuthService {
 
 
 
-    // async  resetPassword(email) {
-    //     try {
-    //         return await this.account.createRecovery(email, conf.appwriteUrl + "/reset-password");
-    //     } catch (error) {
-    //         console.error("Error resetting password:", error);
-    //         throw error; // Re-throw the error for further handling
-    //     }
-    // }
+ async resetPassword(email) {
+  try {
+    return await this.account.createRecovery(email, 'http://localhost:5173/reset-password');
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw error;
+  }
+}
+
+async updatePassword(userId, secret, newPassword) {
+  try {
+    return await this.account.updateRecovery(userId, secret, newPassword, newPassword); // ✅ use this.account
+  } catch (error) {
+    console.error("Error updating password:", error);
+    throw error;
+  }
+}
+
 
 }
 

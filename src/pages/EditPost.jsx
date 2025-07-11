@@ -1,7 +1,7 @@
 import React , {useState , useEffect} from "react";
 import service from "../appwrite/config";
 import { useNavigate , useParams } from "react-router-dom";
-import { PostFrom } from "../components";
+import PostForm from "../components/Post-From/PostFrom";
 
 
 function EditePost() {
@@ -27,7 +27,7 @@ function EditePost() {
     return post ? (
         <div className="py-8">
 
-        <PostFrom  post={post}/>
+        <PostForm  post={post} />
 
         </div>
     ) : null

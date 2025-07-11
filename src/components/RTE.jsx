@@ -22,7 +22,7 @@ export default function RTE({
    initialValue={defaultValue}
         init={{
             initialValue: defaultValue,
-            height: 500,
+            height: 700,
             menubar: true,
             plugins: [
                 "image",
