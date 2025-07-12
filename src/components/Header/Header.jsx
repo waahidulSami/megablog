@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import LogoutBtn from './LogoutBtn';
-import dummimg from '../../assets/dummy.jpg'
+import logo from '../../assets/logo.png'
 import service from '../../appwrite/config';
 import authService from '../../appwrite/auth';
 const Header = () => {
@@ -40,14 +40,15 @@ const Header = () => {
     <header className="border-b border-[#eaedf1] bg-white sticky top-0 z-50 shadow-sm">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-3 max-w-7xl mx-auto">
         {/* Logo */}
-        <div className="flex items-center gap-4 text-[#101518]">
-          <div className="size-6 cursor-pointer bg_" >
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor" />
-            </svg>
-          </div>
-          <h2 className="text-[#101518] text-lg font-bold tracking-tight">Bloggr</h2>
-        </div>
+<div className="flex items-center text-[#101518]">
+  <div className=" cursor-pointer ">
+    <img
+      src={logo}
+      alt="Logo"
+      className="w-25 h-full object-contain "
+    />
+  </div>
+</div>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex flex-1 justify-center" aria-label="Main navigation">
