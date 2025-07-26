@@ -67,7 +67,7 @@ export class AuthService {
 
  async resetPassword(email) {
   try {
-    return await this.account.createRecovery(email, 'https://megablog-z23q.vercel.app/resetpassword');
+    return await this.account.createRecovery(email, 'http://localhost:5173/reset-password');
   } catch (error) {
     console.error("Error resetting password:", error);
     throw error;
