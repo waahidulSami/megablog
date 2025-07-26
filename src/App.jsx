@@ -27,7 +27,7 @@ useEffect(() =>{
   .finally(() => setLoading(false))
 },[]) 
   
-  const hideHeaderFooter = ['/login', '/signup', '/recover', '/reset-password']
+  const hideHeaderFooter = ['/login', '/signup', '/recover', '/resetpassword']
     .some(path => location.pathname.toLowerCase().startsWith(path))
 
   return Loading ? (
